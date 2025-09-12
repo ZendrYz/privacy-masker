@@ -1,0 +1,35 @@
+{
+  "name": "privacy-masker",
+  "version": "1.0.0",
+  "description": "Un paquete ligero para enmascarar datos sensibles en logs y APIs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "jest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "privacy",
+    "masking",
+    "gdpr",
+    "security",
+    "data-protection"
+  ],
+  "author": "ZendrYz contacto@zendryz.com",
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "rollup": "^4.21.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tuusuario/privacy-masker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tuusuario/privacy-masker/issues"
+  },
+  "homepage": "https://github.com/tuusuario/privacy-masker#readme"
+}
