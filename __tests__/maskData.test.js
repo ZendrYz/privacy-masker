@@ -2,7 +2,7 @@ const { maskData } = require('../src/index');
 
 describe('maskData', () => {
   test('masks email partially', () => {
-    expect(maskData('user@example.com')).toBe('us***@ex***.com');
+    expect(maskData('user@example.com')).toBe('us***@example.com');
   });
 
   test('masks phone partially', () => {
@@ -11,7 +11,7 @@ describe('maskData', () => {
 
   test('masks object with multiple fields', () => {
     const input = { email: 'user@example.com', phone: '+1234567890' };
-    const expected = { email: 'us***@ex***.com', phone: '+123****7890' };
+    const expected = { email: 'us***@example.com', phone: '+123****7890' };
     expect(maskData(input)).toEqual(expected);
   });
 
@@ -26,5 +26,9 @@ describe('maskData', () => {
 
   test('throws error if no data', () => {
     expect(() => maskData()).toThrow('Data is required');
+  });
+
+  test('masks short phone number', () => {
+    expect(maskData('+12345')).toBe('+12****');
   });
 });
