@@ -1,4 +1,6 @@
 const _ = require('lodash');
+let isPremium = false;
+let premiumKey = null;
 
 // Patrones básicos para detección (se pueden ampliar/ajustar desde options.patterns)
 const defaultPatterns = {
@@ -190,31 +192,57 @@ console.log = (...args) => {
     }
 };
 
-// Modo Premium (sin cambios)
-let isPremium = false;
-function enablePremium(key) {
-    const validKeys = ['PREMIUM_KEY_123'];
-    if (validKeys.includes(key)) {
-        isPremium = true;
-        return { success: true, message: 'Premium enabled' };
+async function enablePremium(key) {
+  try {
+    const response = await fetch(
+      `https://privacy-masker.vercel.app/api/verify?key=${key}`
+    );
+    const data = await response.json();
+
+    if (data.valid) {
+      isPremium = true;
+      premiumKey = key;
+      console.log("✅ Premium habilitado con éxito.");
+      return { success: true, message: "Premium enabled" };
+    } else {
+      throw new Error("Invalid premium key");
     }
-    throw new Error('Invalid premium key');
+  } catch (err) {
+    throw new Error("❌ Error validando clave premium: " + err.message);
+  }
 }
 
-// Funciones premium (sin cambios)
+function checkPremium() {
+  if (!isPremium) {
+    throw new Error(
+      "Esta función requiere Premium. Dona y recibe tu clave en https://tu-dominio-de-donaciones"
+    );
+  }
+}
+
 function maskDataPremium(data, options = {}) {
-    if (!isPremium) throw new Error('Premium feature requires a valid key. Use enablePremium()');
-    const masked = maskData(data, options);
-    const auditLog = { original: data, masked, timestamp: new Date().toISOString() };
-    console.log('Audit Log:', auditLog);
-    return masked;
+  checkPremium();
+  const masked = maskData(data, options);
+  const auditLog = {
+    original: data,
+    masked,
+    timestamp: new Date().toISOString(),
+  };
+  console.log("Audit Log:", auditLog);
+  return masked;
 }
 
 function maskDatabaseQuery(query, options = {}) {
-    if (!isPremium) throw new Error('Premium feature requires a valid key. Use enablePremium()');
-    const maskedQuery = maskData(query, options);
-    console.log('Masked Database Query:', maskedQuery);
-    return maskedQuery;
+  checkPremium();
+  const maskedQuery = maskData(query, options);
+  console.log("Masked Database Query:", maskedQuery);
+  return maskedQuery;
 }
 
-module.exports = { maskData, maskMiddleware, enablePremium, maskDataPremium, maskDatabaseQuery };
+module.exports = {
+  maskData,
+  maskMiddleware,
+  enablePremium,
+  maskDataPremium,
+  maskDatabaseQuery,
+};
