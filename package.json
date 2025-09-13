@@ -18,7 +18,10 @@
   "author": "ZendrYz contacto@zendryz.com",
   "license": "MIT",
   "dependencies": {
-    "lodash": "^4.17.21"
+    "crypto": "^1.0.1",
+    "express": "^5.1.0",
+    "lodash": "^4.17.21",
+    "nodemailer": "^7.0.6"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.6",
